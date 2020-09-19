@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch
+} from "react-router-dom";
+import Menu from './components/fregments/Menu'
+import Header from './components/fregments/Header'
+import Login from './components/pages/Login'
+import Register from './components/pages/Register'
+import { Container } from '@material-ui/core'
 
 function App() {
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpenDrawer(true)
+  }
+
+  const handleDrawerClose = () => {
+    setOpenDrawer(false)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Header handleDrawerOpen={handleDrawerOpen} open={openDrawer}></Header>
+      <Menu open={openDrawer} handleDrawerClose={handleDrawerClose} ></Menu>
+      <Container style={{paddingTop:90}}>
+        <Switch>
+          <Route exact path="/" component={() => <Redirect to="/login" />}></Route>
+          <Route path="/login" component={Login}></Route>
+          <Route path="/register" component={Register}></Route>
+        </Switch>
+      </Container>
+    </Router>
+  )
 }
 
-export default App;
+export default App
